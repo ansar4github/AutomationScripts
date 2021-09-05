@@ -1,0 +1,15 @@
+$dsNames = Import-Csv -Path C:\Temp\Datastores.csv -UseCulture
+
+Get-VMHost |
+
+ForEach-Object -Process {
+
+   $esxcli = Get-EsxCli -VMHost $_ -V2
+
+   $dsNames | ForEach-Object -Process {
+
+     $esxcli.storage.vmfs.unmap.Invoke(@{'volumelabel'="$($_.Name)"})
+
+   }
+
+}
